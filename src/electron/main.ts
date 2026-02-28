@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, Menu } from "electron";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -8,12 +8,15 @@ const __dirname = path.dirname(__filename);
 const isDev = process.env.NODE_ENV === "development";
 
 function createWindow() {
+  Menu.setApplicationMenu(null);
+
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 720,
     webPreferences: {
       preload: path.join(__dirname, "preload.ts"),
       contextIsolation: true,
+      webviewTag : true,
     },
   });
 
@@ -22,6 +25,8 @@ function createWindow() {
   } else {
     win.loadFile(path.join(__dirname, "index.html"));
   }
+
+  win.maximize();
 }
 
 
