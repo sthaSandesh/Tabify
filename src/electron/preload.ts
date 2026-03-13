@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import os from "os";
-import { contextBridge } from "electron";
+import { contextBridge, ipcRenderer } from "electron";
 
 const saveLinkPath = path.join(os.homedir(), ".tabify_config.json");
 
@@ -28,4 +28,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
       return;
     }
   },
+  minimize: () => ipcRenderer.send("minimize"),
+  maximize: () => {
+    ipcRenderer.send("maximize");
+  },
+  close: () => ipcRenderer.send("close"),
 });
