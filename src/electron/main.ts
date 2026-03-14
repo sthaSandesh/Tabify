@@ -11,7 +11,7 @@ const isDev = process.env.NODE_ENV === "development";
 function createWindow() {
   Menu.setApplicationMenu(null);
 
-  const preloadPath = path.join(__dirname, "../dist/preload.js");
+  const preloadPath = path.join(__dirname, "preload.cts");
 
   console.log("Preload path:", preloadPath);
   console.log("Exists:", fs.existsSync(preloadPath));
@@ -25,6 +25,7 @@ function createWindow() {
       preload: preloadPath,
       contextIsolation: true,
       webviewTag: true,
+      sandbox: false,
     },
   });
 
@@ -35,6 +36,10 @@ function createWindow() {
   }
 
   win.maximize();
+
+  ipcMain.on("toggle-devtools", () => {
+    win.webContents.toggleDevTools();
+  });
 
   ipcMain.on("close", () => {
     win.close();

@@ -1,10 +1,11 @@
-import fs from "fs";
-import path from "path";
-import os from "os";
-import { contextBridge, ipcRenderer } from "electron";
+/* eslint-disable @typescript-eslint/no-require-imports*/
+const fs = require("fs");
+const path = require("path");
+const os = require("os");
+const { contextBridge, ipcRenderer } = require("electron");
 
 const saveLinkPath = path.join(os.homedir(), ".tabify_config.json");
-
+console.log("hellonga");
 contextBridge.exposeInMainWorld("electronAPI", {
   getSavedLink: () => {
     try {
@@ -33,4 +34,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.send("maximize");
   },
   close: () => ipcRenderer.send("close"),
+
+  toggleDevTools: () => ipcRenderer.send("toggle-devtools"),
 });
