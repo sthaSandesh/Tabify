@@ -1,7 +1,9 @@
-import { app, BrowserWindow, ipcMain, Menu } from "electron";
+import { app, BrowserWindow, ipcMain, Menu, session } from "electron";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
+import { ElectronBlocker } from "@ghostery/adblocker-electron";
+import fetch from "cross-fetch";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -55,7 +57,32 @@ function createWindow() {
   });
 }
 
-app.whenReady().then(createWindow);
+let blocker: ElectronBlocker | null = null;
+
+async function initAdBlocker() {
+  const cachePath = path.join(app.getPath("userData"), "adblocker-engine.bin");
+  blocker = await ElectronBlocker.fromPrebuiltAdsAndTracking(fetch, {
+    path: cachePath,
+    read: fs.promises.readFile,
+    write: fs.promises.writeFile,
+  });
+  blocker.enableBlockingInSession(session.defaultSession);
+}
+
+app.on("web-contents-created", (_event, contents) => {
+  if (contents.getType() === "webview" && blocker) {
+    blocker.enableBlockingInSession(contents.session);
+  }
+});
+
+app.whenReady().then(async () => {
+  try {
+    await initAdBlocker();
+  } catch (err) {
+    console.error("Failed to initialize ad blocker:", err);
+  }
+  createWindow();
+});
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
