@@ -9,11 +9,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const isDev = process.env.NODE_ENV === "development";
+const startHidden = process.argv.includes("--hidden");
 
 function createWindow() {
   Menu.setApplicationMenu(null);
 
-  const preloadPath = path.join(__dirname, "preload.cts");
+  const preloadPath = path.join(__dirname, "preload.cjs");
 
   console.log("Preload path:", preloadPath);
   console.log("Exists:", fs.existsSync(preloadPath));
@@ -23,6 +24,7 @@ function createWindow() {
     height: 720,
     frame: false,
     titleBarStyle: "hidden",
+    show: !startHidden,
     webPreferences: {
       preload: preloadPath,
       contextIsolation: true,
@@ -34,10 +36,12 @@ function createWindow() {
   if (isDev) {
     win.loadURL("http://localhost:3000");
   } else {
-    win.loadFile(path.join(__dirname, "index.html"));
+    win.loadFile(path.join(__dirname, "..", "out", "index.html"));
   }
 
-  win.maximize();
+  if (!startHidden) {
+    win.maximize();
+  }
 
   ipcMain.on("toggle-devtools", () => {
     win.webContents.toggleDevTools();
