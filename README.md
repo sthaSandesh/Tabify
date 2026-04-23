@@ -4,6 +4,15 @@ Turn any website into a full-screen desktop app. Tabify is an Electron + Next.js
 
 ---
 
+## Download
+
+[![Download for Windows](https://img.shields.io/badge/Download-Windows%20Installer-blue?style=for-the-badge&logo=windows)](https://github.com/sthaSandesh/Tabify/releases/latest)
+
+> Windows 10/11 — download `TabifyBySandy Setup 0.1.0.exe` from the latest release.
+or 
+clone the repo and run "yarn dist" it will create release folder and then you can see the tabify setup inside it 
+
+---
 ## Features
 
 - Save any URL as your app's target link
