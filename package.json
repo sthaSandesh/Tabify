@@ -18,6 +18,7 @@
   "build": {
     "appId": "com.tabify.app",
     "productName": "Tabify",
+    "icon": "build/icon",
     "directories": {
       "output": "release",
       "buildResources": "build"
@@ -25,13 +26,16 @@
     "files": [
       "dist-electron/**/*",
       "out/**/*",
+      "public/Tabify.png",
       "package.json"
     ],
     "win": {
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ]
     },

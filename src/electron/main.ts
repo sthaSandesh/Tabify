@@ -25,6 +25,7 @@ function createWindow() {
     frame: false,
     titleBarStyle: "hidden",
     show: !startHidden,
+    icon: path.join(__dirname, "..", "public", "Tabify.png"),
     webPreferences: {
       preload: preloadPath,
       contextIsolation: true,
